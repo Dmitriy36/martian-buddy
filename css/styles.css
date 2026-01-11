@@ -24,7 +24,7 @@ body {
 /* Left sidebar */
 .left-sidebar {
   position: sticky;
-  top: 20px;
+  top: 80px; /* Changed from 20px to give space for search bar */
   height: fit-content;
   background-color: #2a2a2a;
   padding: 20px;
@@ -72,10 +72,9 @@ body {
   border: 2px solid #444;
 }
 
-/* Right sidebar */
 .right-sidebar {
   position: sticky;
-  top: 20px;
+  top: 80px; /* Changed from 20px to give space for search bar */
   height: fit-content;
 }
 
