@@ -26,6 +26,7 @@
         border-left: 4px solid #ff4444;
       }
     </style>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
   <body>
     <a href="../index.html">← Back to Home</a>
@@ -76,6 +77,10 @@
       </div>
       <!-- Honeypot field (hidden from humans, bots will fill it) -->
       <input type="text" name="website" id="honeypot" style="display: none" />
+      <div
+        class="g-recaptcha"
+        data-sitekey="6Lf1gUcsAAAAAFGSouwBTJiLX7_3li7Hlmpi_F1M"
+      ></div>
 
       <button
         type="submit"
@@ -152,6 +157,13 @@
               "Spam detected.";
             return;
           }
+          // Verify reCAPTCHA
+          const recaptchaResponse = grecaptcha.getResponse();
+          if (!recaptchaResponse) {
+            document.getElementById("form-message").textContent =
+              "Please complete the reCAPTCHA.";
+            return;
+          }
 
           const authorName = document
             .getElementById("author-name")
@@ -166,12 +178,45 @@
             return;
           }
 
+          // Get user's IP address (we'll use a simple approach)
+          let userIP = "unknown";
+          try {
+            const ipResponse = await fetch("https://api.ipify.org?format=json");
+            const ipData = await ipResponse.json();
+            userIP = ipData.ip;
+          } catch (e) {
+            console.log("Could not get IP");
+          }
+
+          // Check rate limit: max 3 comments per hour from same IP
+          const oneHourAgo = new Date(
+            Date.now() - 60 * 60 * 1000
+          ).toISOString();
+          const { data: recentComments, error: rateLimitError } =
+            await supabaseClient
+              .from("comments")
+              .select("id")
+              .eq("ip_address", userIP)
+              .gte("created_at", oneHourAgo);
+
+          if (rateLimitError) {
+            console.error("Error checking rate limit:", rateLimitError);
+          }
+
+          if (recentComments && recentComments.length >= 3) {
+            document.getElementById("form-message").textContent =
+              "Rate limit exceeded. You can only submit 3 tips per hour. Please try again later.";
+            return;
+          }
+
+          // Insert comment with IP address
           const { error } = await supabaseClient.from("comments").insert([
             {
               guide_page: "level-1",
               author_name: authorName,
               comment_text: commentText,
               approved: false,
+              ip_address: userIP,
             },
           ]);
 
