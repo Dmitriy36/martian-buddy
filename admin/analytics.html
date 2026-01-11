@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analytics Dashboard - Martian Buddy Admin</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #1a1a1a;
+        color: #f0f0f0;
+      }
+      h1 {
+        color: #ff4444;
+      }
+      h2 {
+        color: #66ccff;
+        margin-top: 40px;
+      }
+      a {
+        color: #66ccff;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+      }
+      .stat-card {
+        background-color: #2a2a2a;
+        padding: 20px;
+        border-left: 4px solid #ff4444;
+      }
+      .stat-number {
+        font-size: 2.5em;
+        color: #ff4444;
+        font-weight: bold;
+      }
+      .stat-label {
+        color: #999;
+        margin-top: 10px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #2a2a2a;
+      }
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #444;
+      }
+      th {
+        background-color: #1a1a1a;
+        color: #ff4444;
+      }
+      tr:hover {
+        background-color: #333;
+      }
+      #loading {
+        color: #66ccff;
+        font-size: 1.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📊 Analytics Dashboard</h1>
+    <p>
+      <a href="../index.html">← Back to Home</a> |
+      <a href="moderate.html">Moderate Comments</a>
+    </p>
+
+    <div id="loading">Loading analytics...</div>
+
+    <div class="stats-grid" id="stats-grid" style="display: none">
+      <div class="stat-card">
+        <div class="stat-number" id="total-views">0</div>
+        <div class="stat-label">Total Page Views</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="unique-ips">0</div>
+        <div class="stat-label">Unique Visitors</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="countries-count">0</div>
+        <div class="stat-label">Countries</div>
+      </div>
+    </div>
+
+    <h2>Views by Page</h2>
+    <table id="pages-table" style="display: none">
+      <thead>
+        <tr>
+          <th>Page</th>
+          <th>Views</th>
+        </tr>
+      </thead>
+      <tbody id="pages-body"></tbody>
+    </table>
+
+    <h2>Views by Country</h2>
+    <table id="countries-table" style="display: none">
+      <thead>
+        <tr>
+          <th>Country</th>
+          <th>Views</th>
+        </tr>
+      </thead>
+      <tbody id="countries-body"></tbody>
+    </table>
+
+    <h2>Recent Visitors (Last 50)</h2>
+    <table id="recent-table" style="display: none">
+      <thead>
+        <tr>
+          <th>Page</th>
+          <th>Country</th>
+          <th>City</th>
+          <th>IP</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody id="recent-body"></tbody>
+    </table>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const SUPABASE_URL = "https://ewztgzyqrgvhgmbaldgn.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3enRnenlxcmd2aGdtYmFsZGduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxNjEwMjAsImV4cCI6MjA4MzczNzAyMH0.es4df8tu_c7sAKmjSHLD-SigOArXoZhB7JqQ27q0ouY";
+      const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+      async function loadAnalytics() {
+        try {
+          // Get all page views
+          const { data: allViews, error } = await supabaseClient
+            .from("page_views")
+            .select("*")
+            .order("visited_at", { ascending: false });
+
+          if (error) {
+            document.getElementById("loading").textContent =
+              "Error loading analytics: " + error.message;
+            return;
+          }
+
+          if (!allViews || allViews.length === 0) {
+            document.getElementById("loading").textContent =
+              "No page views yet.";
+            return;
+          }
+
+          // Calculate stats
+          const totalViews = allViews.length;
+          const uniqueIPs = new Set(allViews.map((v) => v.ip_address)).size;
+          const countries = new Set(
+            allViews
+              .filter((v) => v.country !== "unknown")
+              .map((v) => v.country)
+          ).size;
+
+          // Display top stats
+          document.getElementById("total-views").textContent = totalViews;
+          document.getElementById("unique-ips").textContent = uniqueIPs;
+          document.getElementById("countries-count").textContent = countries;
+          document.getElementById("stats-grid").style.display = "grid";
+
+          // Views by page
+          const pageViews = {};
+          allViews.forEach((view) => {
+            pageViews[view.page_path] = (pageViews[view.page_path] || 0) + 1;
+          });
+          const pagesBody = document.getElementById("pages-body");
+          pagesBody.innerHTML = Object.entries(pageViews)
+            .sort((a, b) => b[1] - a[1])
+            .map(
+              ([page, count]) => `<tr><td>${page}</td><td>${count}</td></tr>`
+            )
+            .join("");
+          document.getElementById("pages-table").style.display = "table";
+
+          // Views by country
+          const countryViews = {};
+          allViews.forEach((view) => {
+            if (view.country && view.country !== "unknown") {
+              countryViews[view.country] =
+                (countryViews[view.country] || 0) + 1;
+            }
+          });
+          const countriesBody = document.getElementById("countries-body");
+          countriesBody.innerHTML = Object.entries(countryViews)
+            .sort((a, b) => b[1] - a[1])
+            .map(
+              ([country, count]) =>
+                `<tr><td>${country}</td><td>${count}</td></tr>`
+            )
+            .join("");
+          document.getElementById("countries-table").style.display = "table";
+
+          // Recent visitors
+          const recentBody = document.getElementById("recent-body");
+          recentBody.innerHTML = allViews
+            .slice(0, 50)
+            .map(
+              (view) => `
+                    <tr>
+                        <td>${view.page_path}</td>
+                        <td>${view.country || "unknown"}</td>
+                        <td>${view.city || "unknown"}</td>
+                        <td>${view.ip_address}</td>
+                        <td>${new Date(view.visited_at).toLocaleString()}</td>
+                    </tr>
+                `
+            )
+            .join("");
+          document.getElementById("recent-table").style.display = "table";
+
+          document.getElementById("loading").style.display = "none";
+        } catch (err) {
+          document.getElementById("loading").textContent =
+            "Error: " + err.message;
+        }
+      }
+
+      loadAnalytics();
+    </script>
+  </body>
+</html>
