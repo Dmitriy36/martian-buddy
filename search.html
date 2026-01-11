@@ -110,13 +110,11 @@
           results
             .map(
               (result) => `
-              <div class="search-result">
-                  <h3><a href="${result.url}">${escapeHtml(
-                result.title
-              )}</a></h3>
-                  <p>${escapeHtml(result.snippet)}</p>
-              </div>
-          `
+      <div class="search-result">
+          <h3><a href="${result.url}">${escapeHtml(result.title)}</a></h3>
+          <p>${highlightSearchTerm(escapeHtml(result.snippet), query)}</p>
+      </div>
+  `
             )
             .join("");
       }
@@ -125,6 +123,21 @@
         const div = document.createElement("div");
         div.textContent = text;
         return div.innerHTML;
+      }
+
+      function highlightSearchTerm(text, searchTerm) {
+        if (!searchTerm || searchTerm.trim().length === 0) {
+          return text;
+        }
+
+        // Escape special regex characters in search term
+        const escapedTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const regex = new RegExp(`(${escapedTerm})`, "gi");
+
+        return text.replace(
+          regex,
+          '<mark style="background-color: #ff4444; color: #000; padding: 2px 4px; font-weight: bold;">$1</mark>'
+        );
       }
     </script>
   </body>
