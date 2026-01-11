@@ -84,14 +84,16 @@
         }, 300);
       });
 
-      function performSearch(query) {
+      async function performSearch(query) {
         if (!query || query.trim().length < 2) {
           searchResults.innerHTML =
             '<p class="no-results">Enter at least 2 characters to search.</p>';
           return;
         }
 
-        const results = searchPages(query);
+        searchResults.innerHTML = '<p style="color: #66ccff;">Searching...</p>';
+
+        const results = await searchPages(query); // Add await here
 
         if (results.length === 0) {
           searchResults.innerHTML =
@@ -108,13 +110,13 @@
           results
             .map(
               (result) => `
-                <div class="search-result">
-                    <h3><a href="${result.url}">${escapeHtml(
+              <div class="search-result">
+                  <h3><a href="${result.url}">${escapeHtml(
                 result.title
               )}</a></h3>
-                    <p>${escapeHtml(result.snippet)}</p>
-                </div>
-            `
+                  <p>${escapeHtml(result.snippet)}</p>
+              </div>
+          `
             )
             .join("");
       }
