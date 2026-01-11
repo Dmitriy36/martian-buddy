@@ -9,81 +9,128 @@
     <script src="/js/global-search.js"></script>
   </head>
   <body>
-    <a href="../index.html">← Back to Home</a>
+    <!-- Page container with 3 columns -->
+    <div class="page-container">
+      <!-- LEFT SIDEBAR: Navigation -->
+      <aside class="left-sidebar">
+        <h3>📚 Level Guide</h3>
+        <ul>
+          <li><a href="/index.html">← Home</a></li>
+          <li><a href="/guides/level-1.html">Level 1: Mars City</a></li>
+          <li><a href="#" style="color: #666">Level 2: Coming Soon</a></li>
+          <li><a href="#" style="color: #666">Level 3: Coming Soon</a></li>
+        </ul>
 
-    <h1>Level 1: Mars City</h1>
+        <h3 style="margin-top: 30px">⚙️ On This Page</h3>
+        <ul>
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#walkthrough">Walkthrough</a></li>
+          <li><a href="#locker-codes">Locker Codes</a></li>
+          <li><a href="#comments">Community Tips</a></li>
+        </ul>
+      </aside>
 
-    <h2>Overview</h2>
-    <p>
-      This is the introductory level where you arrive at Mars City and get
-      familiar with the environment before things go wrong.
-    </p>
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <h1>Level 1: Mars City</h1>
 
-    <h2>Walkthrough</h2>
-    <p>
-      Follow the security guard through the facility. Pick up your PDA from
-      reception. Explore the area and talk to NPCs to get a feel for the story.
-    </p>
+        <h2 id="overview">Overview</h2>
+        <p>
+          This is the introductory level where you arrive at Mars City and get
+          familiar with the environment before things go wrong.
+        </p>
 
-    <h2>Locker Codes</h2>
-    <ul>
-      <li><strong>Locker #001:</strong> Code 123 - Contains armor shards</li>
-      <li><strong>Locker #034:</strong> Code 531 - Contains ammo and health</li>
-    </ul>
+        <h2 id="walkthrough">Walkthrough</h2>
+        <p>
+          Follow the security guard through the facility. Pick up your PDA from
+          reception. Explore the area and talk to NPCs to get a feel for the
+          story.
+        </p>
 
-    <div class="tip">
-      <strong>Pro Tip:</strong> Make sure to grab all the armor and ammo you can
-      before the invasion starts!
+        <h2 id="locker-codes">Locker Codes</h2>
+        <ul>
+          <li>
+            <strong>Locker #001:</strong> Code 123 - Contains armor shards
+          </li>
+          <li>
+            <strong>Locker #034:</strong> Code 531 - Contains ammo and health
+          </li>
+        </ul>
+
+        <div class="tip">
+          <strong>Pro Tip:</strong> Make sure to grab all the armor and ammo you
+          can before the invasion starts!
+        </div>
+
+        <h2 id="comments">Community Tips</h2>
+        <div id="comments-list"></div>
+
+        <h3>Submit a Tip</h3>
+        <form id="comment-form">
+          <div>
+            <label>Your Name:</label><br />
+            <input type="text" id="author-name" required maxlength="50" />
+          </div>
+          <div style="margin-top: 10px">
+            <label>Your Tip:</label><br />
+            <textarea
+              id="comment-text"
+              required
+              rows="4"
+              maxlength="1000"
+            ></textarea>
+          </div>
+          <input
+            type="text"
+            name="website"
+            id="honeypot"
+            style="display: none"
+          />
+          <div
+            class="g-recaptcha"
+            data-sitekey="6Lf1gUcsAAAAAFGSouwBTJiLX7_3li7Hlmpi_F1M"
+          ></div>
+
+          <button type="submit">Submit Tip</button>
+        </form>
+        <p id="form-message" style="color: #66ccff; margin-top: 10px"></p>
+      </main>
+
+      <!-- RIGHT SIDEBAR: Quick Reference -->
+      <aside class="right-sidebar">
+        <div class="sidebar-widget">
+          <h3>🔑 Quick Codes</h3>
+          <ul>
+            <li>Locker #001: <code>123</code></li>
+            <li>Locker #034: <code>531</code></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-widget">
+          <h3>💡 Quick Tips</h3>
+          <ul>
+            <li>Save ammo early on</li>
+            <li>Listen to all audio logs</li>
+            <li>Check every corner</li>
+          </ul>
+        </div>
+
+        <div class="sidebar-widget">
+          <h3>🔗 Related Guides</h3>
+          <ul>
+            <li><a href="#">Weapon Guide</a></li>
+            <li><a href="#">Enemy Weaknesses</a></li>
+            <li><a href="#">Achievement Guide</a></li>
+          </ul>
+        </div>
+      </aside>
     </div>
 
-    <h2>Comments</h2>
-    <div id="comments-list"></div>
-
-    <h3>Submit a Tip</h3>
-    <form id="comment-form">
-      <div>
-        <label>Your Name:</label><br />
-        <input type="text" id="author-name" required maxlength="50" />
-      </div>
-      <div style="margin-top: 10px">
-        <label>Your Tip:</label><br />
-        <textarea
-          id="comment-text"
-          required
-          rows="4"
-          style="width: 100%; max-width: 500px"
-          maxlength="1000"
-        ></textarea>
-      </div>
-      <!-- Honeypot field (hidden from humans, bots will fill it) -->
-      <input type="text" name="website" id="honeypot" style="display: none" />
-      <div
-        class="g-recaptcha"
-        data-sitekey="6Lf1gUcsAAAAAFGSouwBTJiLX7_3li7Hlmpi_F1M"
-      ></div>
-
-      <button
-        type="submit"
-        style="
-          margin-top: 10px;
-          padding: 10px 20px;
-          background-color: #ff4444;
-          color: white;
-          border: none;
-          cursor: pointer;
-        "
-      >
-        Submit Tip
-      </button>
-    </form>
-    <p id="form-message" style="color: #66ccff; margin-top: 10px"></p>
-
+    <!-- Keep your existing scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../js/comments-analytics.js"></script>
+    <script src="/js/comments-analytics.js"></script>
     <script>
       initCommentSystem("level-1");
     </script>
-
-    <a href="../index.html">← Back to Home</a>
   </body>
 </html>
