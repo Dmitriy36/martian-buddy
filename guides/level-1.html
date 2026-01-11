@@ -55,13 +55,148 @@
       before the invasion starts!
     </div>
 
-    <h2>Community Tips</h2>
-    <p>
-      <em
-        >User-submitted tips will appear here once we add the comment
-        system.</em
+    <h2>Comments</h2>
+    <div id="comments-list"></div>
+
+    <h3>Submit a Tip</h3>
+    <form id="comment-form">
+      <div>
+        <label>Your Name:</label><br />
+        <input type="text" id="author-name" required maxlength="50" />
+      </div>
+      <div style="margin-top: 10px">
+        <label>Your Tip:</label><br />
+        <textarea
+          id="comment-text"
+          required
+          rows="4"
+          style="width: 100%; max-width: 500px"
+          maxlength="1000"
+        ></textarea>
+      </div>
+      <!-- Honeypot field (hidden from humans, bots will fill it) -->
+      <input type="text" name="website" id="honeypot" style="display: none" />
+
+      <button
+        type="submit"
+        style="
+          margin-top: 10px;
+          padding: 10px 20px;
+          background-color: #ff4444;
+          color: white;
+          border: none;
+          cursor: pointer;
+        "
       >
-    </p>
+        Submit Tip
+      </button>
+    </form>
+    <p id="form-message" style="color: #66ccff; margin-top: 10px"></p>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const SUPABASE_URL = "https://ewztgzyqrgvhgmbaldgn.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3enRnenlxcmd2aGdtYmFsZGduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxNjEwMjAsImV4cCI6MjA4MzczNzAyMH0.es4df8tu_c7sAKmjSHLD-SigOArXoZhB7JqQ27q0ouY";
+      const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+      // Load approved comments
+      async function loadComments() {
+        const { data, error } = await supabaseClient
+          .from("comments")
+          .select("*")
+          .eq("guide_page", "level-1")
+          .eq("approved", true)
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          console.error("Error loading comments:", error);
+          return;
+        }
+
+        const commentsList = document.getElementById("comments-list");
+        if (data.length === 0) {
+          commentsList.innerHTML =
+            "<p><em>No tips yet. Be the first to contribute!</em></p>";
+          return;
+        }
+
+        commentsList.innerHTML = data
+          .map(
+            (comment) => `
+            <div class="tip">
+                <strong>${escapeHtml(
+                  comment.author_name
+                )}</strong> - ${new Date(
+              comment.created_at
+            ).toLocaleDateString()}
+                <p>${escapeHtml(comment.comment_text)}</p>
+            </div>
+        `
+          )
+          .join("");
+      }
+
+      // Submit new comment
+      document
+        .getElementById("comment-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          // Check honeypot
+          if (document.getElementById("honeypot").value !== "") {
+            document.getElementById("form-message").textContent =
+              "Spam detected.";
+            return;
+          }
+
+          const authorName = document
+            .getElementById("author-name")
+            .value.trim();
+          const commentText = document
+            .getElementById("comment-text")
+            .value.trim();
+
+          if (!authorName || !commentText) {
+            document.getElementById("form-message").textContent =
+              "Please fill in all fields.";
+            return;
+          }
+
+          const { error } = await supabaseClient.from("comments").insert([
+            {
+              guide_page: "level-1",
+              author_name: authorName,
+              comment_text: commentText,
+              approved: false,
+            },
+          ]);
+
+          if (error) {
+            console.error("Error submitting comment:", error);
+            document.getElementById("form-message").textContent =
+              "Error submitting tip. Please try again.";
+            return;
+          }
+
+          document.getElementById("form-message").textContent =
+            "Thanks! Your tip will appear after moderation.";
+          document.getElementById("comment-form").reset();
+        });
+
+      // Escape HTML to prevent XSS
+      function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      // Load comments on page load
+      loadComments();
+    </script>
 
     <a href="../index.html">← Back to Home</a>
   </body>
