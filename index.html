@@ -6,69 +6,134 @@
     <title>Martian Buddy - Doom 3 Guides</title>
     <link rel="stylesheet" href="/css/styles.css" />
     <script src="/js/global-search.js"></script>
+    <style>
+      /* Quick nav menu - top right, sticky */
+      .quick-nav {
+        position: fixed;
+        top: 60px; /* Below search bar */
+        right: 20px;
+        background-color: rgba(42, 42, 42, 0.95);
+        padding: 15px 20px;
+        border-left: 4px solid #ff4444;
+        z-index: 999;
+        backdrop-filter: blur(10px);
+        min-width: 200px;
+      }
+
+      .quick-nav h3 {
+        color: #ff4444;
+        margin: 0 0 15px 0;
+        font-size: 1em;
+      }
+
+      .quick-nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .quick-nav li {
+        margin: 8px 0;
+      }
+
+      .quick-nav a {
+        color: #66ccff;
+        text-decoration: none;
+        font-size: 0.9em;
+      }
+
+      .quick-nav a:hover {
+        color: #ff4444;
+      }
+
+      @media screen and (max-width: 768px) {
+        .quick-nav {
+          position: static;
+          margin: 20px;
+          right: auto;
+        }
+      }
+    </style>
   </head>
-  <body class="hero-layout">
+  <body>
+    <!-- Quick Navigation - Top Right -->
+    <nav class="quick-nav">
+      <h3>📖 Level Guides</h3>
+      <ul>
+        <li><a href="/guides/level-1.html">Level 1: Mars City</a></li>
+        <li><a href="#content">More Coming Soon</a></li>
+      </ul>
+    </nav>
+
     <!-- Full-screen Hero Section -->
     <div class="hero-section">
-      <img src="/images/doom3_splash2.png" alt="Doom 3 Mars City" />
+      <img src="/images/doom3-hero.jpg" alt="Doom 3 Mars City" />
       <div class="hero-overlay">
         <h1>Martian Buddy</h1>
         <p>Your Complete Doom 3 Survival Guide</p>
         <div class="hero-cta">
-          <a href="#guides">Browse Guides</a>
+          <a href="#content">Browse Guides</a>
           <a href="/search.html">Search Tips</a>
         </div>
       </div>
     </div>
 
-    <!-- Regular Content Below -->
-    <div class="content-below-hero">
-      <div class="page-container" id="guides">
-        <!-- LEFT SIDEBAR -->
-        <aside class="left-sidebar">
-          <h3>🎮 Navigation</h3>
-          <ul>
-            <li><a href="/index.html">Home</a></li>
-            <li><a href="/search.html">Search Guides</a></li>
-          </ul>
+    <!-- Content Below Hero -->
+    <div
+      id="content"
+      style="background-color: #1a1a1a; padding: 60px 20px; min-height: 100vh"
+    >
+      <div style="max-width: 800px; margin: 0 auto">
+        <h2 style="color: #ff4444">Available Guides</h2>
 
-          <h3 style="margin-top: 30px">📖 All Guides</h3>
-          <ul>
-            <li><a href="/guides/level-1.html">Level 1: Mars City</a></li>
-            <li><a href="#" style="color: #666">Level 2: Coming Soon</a></li>
-            <li><a href="#" style="color: #666">Level 3: Coming Soon</a></li>
-          </ul>
-        </aside>
+        <div
+          style="
+            background-color: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #ff4444;
+          "
+        >
+          <h3 style="color: #66ccff; margin-top: 0">
+            <a
+              href="/guides/level-1.html"
+              style="color: #66ccff; text-decoration: none"
+              >Level 1: Mars City</a
+            >
+          </h3>
+          <p>
+            Complete walkthrough, locker codes, and community tips for the
+            introductory level.
+          </p>
+        </div>
 
-        <!-- MAIN CONTENT -->
-        <main class="main-content">
-          <h2>Level Guides</h2>
-          <ul>
-            <li><a href="guides/level-1.html">Level 1: Mars City</a></li>
-            <li>
-              <a href="guides/level-2.html">Level 2: Mars City Underground</a>
-            </li>
-          </ul>
-        </main>
+        <div
+          style="
+            background-color: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #666;
+            opacity: 0.6;
+          "
+        >
+          <h3 style="color: #666; margin-top: 0">
+            Level 2: Mars City Underground
+          </h3>
+          <p style="color: #666">Coming soon...</p>
+        </div>
 
-        <!-- RIGHT SIDEBAR -->
-        <aside class="right-sidebar">
-          <div class="sidebar-widget">
-            <h3>🔍 Quick Search</h3>
-            <p style="font-size: 0.9em">
-              Use the search bar above to find locker codes, weapons, enemies,
-              and more!
-            </p>
-          </div>
-
-          <div class="sidebar-widget">
-            <h3>📊 Site Stats</h3>
-            <p style="font-size: 0.9em">
-              Community-driven Doom 3 knowledge base with verified tips and
-              codes.
-            </p>
-          </div>
-        </aside>
+        <div
+          style="
+            background-color: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #666;
+            opacity: 0.6;
+          "
+        >
+          <h3 style="color: #666; margin-top: 0">Level 3: Admin Facility</h3>
+          <p style="color: #666">Coming soon...</p>
+        </div>
       </div>
     </div>
   </body>
