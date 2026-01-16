@@ -13,22 +13,9 @@ body {
   background: linear-gradient(to right, #000000 0%, #1a0000 50%, #2d0505 100%);
 
   /* Subtle Mars/space texture overlays */
-  background-image: linear-gradient(
-      to right,
-      #000000 0%,
-      #1a0000 50%,
-      #2d0505 100%
-    ),
-    radial-gradient(
-      circle at 20% 50%,
-      rgba(139, 69, 19, 0.08) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 80%,
-      rgba(205, 92, 92, 0.05) 0%,
-      transparent 50%
-    ),
+  background-image: linear-gradient(to right, #000000 0%, #1a0000 50%, #2d0505 100%),
+    radial-gradient(circle at 20% 50%, rgba(139, 69, 19, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(205, 92, 92, 0.05) 0%, transparent 50%),
     url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="2" cy="2" r="1.5" fill="rgba(255,255,255,0.3)"/><circle cx="50" cy="50" r="1.5" fill="rgba(255,255,255,0.25)"/><circle cx="80" cy="20" r="1.5" fill="rgba(255,255,255,0.35)"/><circle cx="30" cy="70" r="1.5" fill="rgba(255,255,255,0.2)"/><circle cx="65" cy="35" r="1.5" fill="rgba(255,255,255,0.28)"/><circle cx="15" cy="85" r="1.5" fill="rgba(255,255,255,0.22)"/><circle cx="90" cy="60" r="1.5" fill="rgba(255,255,255,0.32)"/></svg>');
   background-attachment: fixed;
 }
@@ -46,9 +33,9 @@ body {
 /* Left sidebar */
 .left-sidebar {
   position: sticky;
-  top: 80px; /* Changed from 20px to give space for search bar */
+  top: 80px;
   height: fit-content;
-  background-color: #2a2a2a;
+  background-color: rgba(42, 42, 42, 0.9); /* Was #2a2a2a */
   padding: 20px;
   border-left: 4px solid #ff4444;
 }
@@ -83,7 +70,7 @@ body {
 .main-content {
   max-width: 800px;
   padding: 20px;
-  background-color: #0a0a0a;
+  background-color: rgba(10, 10, 10, 0.85); /* Was #0a0a0a */
 }
 
 .main-content img {
@@ -101,7 +88,7 @@ body {
 }
 
 .sidebar-widget {
-  background-color: #2a2a2a;
+  background-color: rgba(42, 42, 42, 0.9); /* Was #2a2a2a */
   padding: 15px;
   margin-bottom: 20px;
   border-left: 4px solid #66ccff;
@@ -296,11 +283,7 @@ th {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0.7) 100%
-  );
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
