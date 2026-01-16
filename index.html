@@ -4,84 +4,72 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Martian Buddy - Doom 3 Guides</title>
-    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
     <script src="/js/global-search.js"></script>
   </head>
-  <body>
-    <div class="page-container">
-      <!-- LEFT SIDEBAR -->
-      <aside class="left-sidebar">
-        <h3>🎮 Navigation</h3>
-        <ul>
-          <li><a href="/index.html">Home</a></li>
-        </ul>
+  <body class="hero-layout">
+    <!-- Full-screen Hero Section -->
+    <div class="hero-section">
+      <img src="/images/doom3_splash2.png" alt="Doom 3 Mars City" />
+      <div class="hero-overlay">
+        <h1>Martian Buddy</h1>
+        <p>Your Complete Doom 3 Survival Guide</p>
+        <div class="hero-cta">
+          <a href="#guides">Browse Guides</a>
+          <a href="/search.html">Search Tips</a>
+        </div>
+      </div>
+    </div>
 
-        <h3 style="margin-top: 30px">📖 All Guides</h3>
-        <ul>
-          <li><a href="/guides/level-1.html">Level 1: Mars City</a></li>
-          <li><a href="#" style="color: #666">Level 2: Coming Soon</a></li>
-          <li><a href="#" style="color: #666">Level 3: Coming Soon</a></li>
-        </ul>
-      </aside>
+    <!-- Regular Content Below -->
+    <div class="content-below-hero">
+      <div class="page-container" id="guides">
+        <!-- LEFT SIDEBAR -->
+        <aside class="left-sidebar">
+          <h3>🎮 Navigation</h3>
+          <ul>
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/search.html">Search Guides</a></li>
+          </ul>
 
-      <!-- MAIN CONTENT -->
-      <main class="main-content">
-        <!-- Hero/Splash Image -->
-        <div style="margin: -20px -20px 30px -20px; position: relative">
-          <img
-            src="/images/doom3_splash2.png"
-            alt="Doom 3 Mars City"
-            style="
-              width: 100%;
-              height: auto;
-              display: block;
-              border: none;
-              margin: 0;
-            "
-          />
-          <div
-            style="
-              position: absolute;
-              bottom: 20px;
-              left: 20px;
-              background-color: rgba(0, 0, 0, 0.8);
-              padding: 20px;
-              border-left: 4px solid #ff4444;
-            "
-          >
-            <h1 style="margin: 0; font-size: 2.5em">Martian Buddy</h1>
-            <p style="margin: 10px 0 0 0; font-size: 1.2em; color: #66ccff">
-              Your Complete Doom 3 Survival Guide
+          <h3 style="margin-top: 30px">📖 All Guides</h3>
+          <ul>
+            <li><a href="/guides/level-1.html">Level 1: Mars City</a></li>
+            <li><a href="#" style="color: #666">Level 2: Coming Soon</a></li>
+            <li><a href="#" style="color: #666">Level 3: Coming Soon</a></li>
+          </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+          <h2>Level Guides</h2>
+          <ul>
+            <li><a href="guides/level-1.html">Level 1: Mars City</a></li>
+            <li>
+              <a href="guides/level-2.html">Level 2: Mars City Underground</a>
+            </li>
+          </ul>
+        </main>
+
+        <!-- RIGHT SIDEBAR -->
+        <aside class="right-sidebar">
+          <div class="sidebar-widget">
+            <h3>🔍 Quick Search</h3>
+            <p style="font-size: 0.9em">
+              Use the search bar above to find locker codes, weapons, enemies,
+              and more!
             </p>
           </div>
-        </div>
 
-        <h2>Level Guides</h2>
-        <ul>
-          <li><a href="guides/level-1.html">Level 1: Mars City</a></li>
-          <li>
-            <a href="guides/level-2.html">Level 2: Mars City Underground</a>
-          </li>
-        </ul>
-      </main>
-
-      <!-- RIGHT SIDEBAR -->
-      <aside class="right-sidebar">
-        <div class="sidebar-widget">
-          <h3>🔍 Quick Search</h3>
-          <p style="font-size: 0.9em">
-            Use the search bar above to find locker codes, weapons, enemies, and
-            more!
-          </p>
-        </div>
-
-        <div class="sidebar-widget">
-          <h3>📊 Site Stats</h3>
-          <p style="font-size: 0.9em">
-            Community-driven Doom 3 knowledge base with verified tips and codes.
-          </p>
-        </div>
-      </aside>
+          <div class="sidebar-widget">
+            <h3>📊 Site Stats</h3>
+            <p style="font-size: 0.9em">
+              Community-driven Doom 3 knowledge base with verified tips and
+              codes.
+            </p>
+          </div>
+        </aside>
+      </div>
     </div>
   </body>
 </html>

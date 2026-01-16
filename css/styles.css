@@ -244,3 +244,112 @@ th {
     padding: 12px;
   }
 }
+
+/* Full-screen hero layout (for homepage only) */
+.hero-layout {
+  display: block;
+  margin: 0;
+  padding: 0;
+  max-width: none;
+}
+
+.hero-section {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  margin-left: calc(-50vw + 50%);
+  overflow: hidden;
+}
+
+.hero-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.hero-overlay h1 {
+  font-size: 4em;
+  margin: 0;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.hero-overlay p {
+  font-size: 1.5em;
+  margin: 20px 0;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+}
+
+.hero-cta {
+  margin-top: 30px;
+}
+
+.hero-cta a {
+  display: inline-block;
+  padding: 15px 40px;
+  background-color: #ff4444;
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em;
+  border-radius: 5px;
+  margin: 0 10px;
+  transition: background-color 0.3s;
+}
+
+.hero-cta a:hover {
+  background-color: #ff6666;
+}
+
+/* Make sidebars semi-transparent on hero page */
+.hero-layout .left-sidebar,
+.hero-layout .right-sidebar {
+  background-color: rgba(42, 42, 42, 0.85);
+  backdrop-filter: blur(10px);
+  position: fixed;
+  top: 80px;
+}
+
+/* Content section below hero */
+.content-below-hero {
+  background-color: #1a1a1a;
+  padding: 60px 20px;
+}
+
+.content-below-hero .page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 1024px) {
+  .hero-section {
+    height: 60vh;
+  }
+
+  .hero-overlay h1 {
+    font-size: 2.5em;
+  }
+
+  .hero-overlay p {
+    font-size: 1.2em;
+  }
+}
