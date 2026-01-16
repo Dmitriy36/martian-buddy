@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Popular Searches - Martian Buddy</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script src="/js/global-search.js"></script>
+    <style>
+      .page-wrapper {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .search-term {
+        background-color: #2a2a2a;
+        padding: 15px 20px;
+        margin: 10px 0;
+        border-left: 4px solid #ff4444;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .search-term:hover {
+        background-color: #333;
+        cursor: pointer;
+      }
+
+      .search-term-text {
+        color: #66ccff;
+        font-size: 1.1em;
+      }
+
+      .search-count {
+        background-color: #ff4444;
+        color: #000;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+      }
+
+      .time-filter {
+        margin: 20px 0;
+      }
+
+      .time-filter button {
+        margin-right: 10px;
+        padding: 8px 15px;
+        background-color: #2a2a2a;
+        color: #66ccff;
+        border: 1px solid #444;
+      }
+
+      .time-filter button.active {
+        background-color: #ff4444;
+        color: #fff;
+        border-color: #ff4444;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <a href="/index.html">← Back to Home</a>
+
+      <h1>🔥 Popular Searches</h1>
+      <p>See what other players are searching for</p>
+
+      <div class="time-filter">
+        <button class="active" onclick="loadPopularSearches('all')">
+          All Time
+        </button>
+        <button onclick="loadPopularSearches('week')">Past Week</button>
+        <button onclick="loadPopularSearches('day')">Past 24 Hours</button>
+      </div>
+
+      <div id="loading" style="color: #66ccff; margin: 30px 0">
+        Loading popular searches...
+      </div>
+      <div id="popular-searches"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const SUPABASE_URL = "https://ewztgzyqrgvhgmbaldgn.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3enRnenlxcmd2aGdtYmFsZGduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxNjEwMjAsImV4cCI6MjA4MzczNzAyMH0.es4df8tu_c7sAKmjSHLD-SigOArXoZhB7JqQ27q0ouY";
+      const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+      let currentFilter = "all";
+
+      async function loadPopularSearches(timeFilter = "all") {
+        currentFilter = timeFilter;
+
+        // Update active button
+        document.querySelectorAll(".time-filter button").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        event.target.classList.add("active");
+
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("popular-searches").innerHTML = "";
+
+        try {
+          let query = supabaseClient
+            .from("search_queries")
+            .select("query, searched_at");
+
+          // Apply time filter
+          if (timeFilter === "week") {
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            query = query.gte("searched_at", weekAgo.toISOString());
+          } else if (timeFilter === "day") {
+            const dayAgo = new Date();
+            dayAgo.setDate(dayAgo.getDate() - 1);
+            query = query.gte("searched_at", dayAgo.toISOString());
+          }
+
+          const { data, error } = await query;
+
+          if (error) {
+            document.getElementById("loading").textContent =
+              "Error loading searches: " + error.message;
+            return;
+          }
+
+          if (!data || data.length === 0) {
+            document.getElementById("loading").textContent = "No searches yet.";
+            return;
+          }
+
+          // Count occurrences of each query
+          const queryCounts = {};
+          data.forEach((item) => {
+            const q = item.query.toLowerCase().trim();
+            queryCounts[q] = (queryCounts[q] || 0) + 1;
+          });
+
+          // Convert to array and sort by count
+          const sortedQueries = Object.entries(queryCounts)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 50); // Top 50
+
+          document.getElementById("loading").style.display = "none";
+
+          if (sortedQueries.length === 0) {
+            document.getElementById("popular-searches").innerHTML =
+              '<p style="color: #999;">No searches found for this time period.</p>';
+            return;
+          }
+
+          // Display results
+          document.getElementById("popular-searches").innerHTML = sortedQueries
+            .map(
+              ([query, count], index) => `
+                    <div class="search-term" onclick="window.location.href='/search.html?q=${encodeURIComponent(
+                      query
+                    )}'">
+                        <span class="search-term-text">${
+                          index + 1
+                        }. ${escapeHtml(query)}</span>
+                        <span class="search-count">${count}</span>
+                    </div>
+                `
+            )
+            .join("");
+        } catch (err) {
+          document.getElementById("loading").textContent =
+            "Error: " + err.message;
+        }
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      // Load all-time searches on page load
+      loadPopularSearches("all");
+    </script>
+  </body>
+</html>

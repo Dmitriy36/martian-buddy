@@ -46,6 +46,7 @@
         font-style: italic;
       }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/bad-words@3.0.4/lib/bad-words.min.js"></script>
   </head>
   <body>
     <a href="/index.html">← Back to Home</a>
@@ -61,6 +62,18 @@
     />
 
     <div id="search-results" class="search-results"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      // Make supabaseClient available globally for search logging
+      const SUPABASE_URL = "https://ewztgzyqrgvhgmbaldgn.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3enRnenlxcmd2aGdtYmFsZGduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxNjEwMjAsImV4cCI6MjA4MzczNzAyMH0.es4df8tu_c7sAKmjSHLD-SigOArXoZhB7JqQ27q0ouY";
+      const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+    </script>
 
     <script src="/js/search-index.js"></script>
     <script>
