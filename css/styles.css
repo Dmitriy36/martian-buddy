@@ -16,7 +16,7 @@ body {
   background-image: linear-gradient(to right, #000000 0%, #1a0000 50%, #2d0505 100%),
     radial-gradient(circle at 20% 50%, rgba(139, 69, 19, 0.08) 0%, transparent 50%),
     radial-gradient(circle at 80% 80%, rgba(205, 92, 92, 0.05) 0%, transparent 50%),
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="2" cy="2" r="1.5" fill="rgba(255,255,255,0.3)"/><circle cx="50" cy="50" r="1.5" fill="rgba(255,255,255,0.25)"/><circle cx="80" cy="20" r="1.5" fill="rgba(255,255,255,0.35)"/><circle cx="30" cy="70" r="1.5" fill="rgba(255,255,255,0.2)"/><circle cx="65" cy="35" r="1.5" fill="rgba(255,255,255,0.28)"/><circle cx="15" cy="85" r="1.5" fill="rgba(255,255,255,0.22)"/><circle cx="90" cy="60" r="1.5" fill="rgba(255,255,255,0.32)"/></svg>');
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><circle cx="10" cy="10" r="2" fill="white"/><circle cx="100" cy="100" r="3" fill="rgba(255,255,255,0.8)"/><circle cx="160" cy="40" r="2.5" fill="rgba(255,255,255,0.9)"/><circle cx="60" cy="140" r="2" fill="white"/><circle cx="130" cy="70" r="2.5" fill="rgba(255,255,255,0.85)"/><circle cx="30" cy="170" r="2" fill="rgba(255,255,255,0.75)"/><circle cx="180" cy="120" r="3" fill="white"/><circle cx="45" cy="85" r="2" fill="rgba(255,255,255,0.8)"/><circle cx="155" cy="155" r="2.5" fill="white"/><circle cx="90" cy="25" r="2" fill="rgba(255,255,255,0.9)"/></svg>');
   background-attachment: fixed;
 }
 
