@@ -8,16 +8,7 @@ body {
   margin: 0;
   padding: 0;
   color: #f0f0f0;
-
-  /* Left-to-right gradient (pitch black to sinister blood red) */
-  background: linear-gradient(to right, #000000 0%, #1a0000 50%, #2d0505 100%);
-
-  /* Subtle Mars/space texture overlays */
-  background-image: linear-gradient(to right, #000000 0%, #1a0000 50%, #2d0505 100%),
-    radial-gradient(circle at 20% 50%, rgba(139, 69, 19, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(205, 92, 92, 0.05) 0%, transparent 50%),
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"><circle cx="200" cy="200" r="50" fill="yellow"/></svg>');
-  background-attachment: fixed;
+  background: red;
 }
 
 /* 3-column grid layout */

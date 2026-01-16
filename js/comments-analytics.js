@@ -21,8 +21,7 @@ function initCommentSystem(guidePage) {
 
     const commentsList = document.getElementById("comments-list");
     if (data.length === 0) {
-      commentsList.innerHTML =
-        "<p><em>No tips yet. Be the first to contribute!</em></p>";
+      commentsList.innerHTML = "<p><em>No tips yet. Be the first to contribute!</em></p>";
       return;
     }
 
@@ -41,86 +40,81 @@ function initCommentSystem(guidePage) {
   }
 
   // Submit new comment
-  document
-    .getElementById("comment-form")
-    .addEventListener("submit", async (e) => {
-      e.preventDefault();
+  document.getElementById("comment-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      // Check honeypot
-      if (document.getElementById("honeypot").value !== "") {
-        document.getElementById("form-message").textContent = "Spam detected.";
-        return;
-      }
+    // Check honeypot
+    if (document.getElementById("honeypot").value !== "") {
+      document.getElementById("form-message").textContent = "Spam detected.";
+      return;
+    }
 
-      // Verify reCAPTCHA
-      const recaptchaResponse = grecaptcha.getResponse();
-      if (!recaptchaResponse) {
-        document.getElementById("form-message").textContent =
-          "Please complete the reCAPTCHA.";
-        return;
-      }
+    // Verify reCAPTCHA
+    const recaptchaResponse = grecaptcha.getResponse();
+    if (!recaptchaResponse) {
+      document.getElementById("form-message").textContent = "Please complete the reCAPTCHA.";
+      return;
+    }
 
-      const authorName = document.getElementById("author-name").value.trim();
-      const commentText = document.getElementById("comment-text").value.trim();
+    const authorName = document.getElementById("author-name").value.trim();
+    const commentText = document.getElementById("comment-text").value.trim();
 
-      if (!authorName || !commentText) {
-        document.getElementById("form-message").textContent =
-          "Please fill in all fields.";
-        return;
-      }
+    if (!authorName || !commentText) {
+      document.getElementById("form-message").textContent = "Please fill in all fields.";
+      return;
+    }
 
-      // Get user's IP address
-      let userIP = "unknown";
-      try {
-        const ipResponse = await fetch("https://api.ipify.org?format=json");
-        const ipData = await ipResponse.json();
-        userIP = ipData.ip;
-      } catch (e) {
-        console.log("Could not get IP");
-      }
+    // Get user's IP address
+    let userIP = "unknown";
+    try {
+      const ipResponse = await fetch("https://api.ipify.org?format=json");
+      const ipData = await ipResponse.json();
+      userIP = ipData.ip;
+    } catch (e) {
+      console.log("Could not get IP");
+    }
 
-      // Check rate limit: max 3 comments per hour from same IP
-      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-      const { data: recentComments, error: rateLimitError } =
-        await supabaseClient
-          .from("comments")
-          .select("id")
-          .eq("ip_address", userIP)
-          .gte("created_at", oneHourAgo);
+    // Check rate limit: max 3 comments per hour from same IP
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const { data: recentComments, error: rateLimitError } = await supabaseClient
+      .from("comments")
+      .select("id")
+      .eq("ip_address", userIP)
+      .gte("created_at", oneHourAgo);
 
-      if (rateLimitError) {
-        console.error("Error checking rate limit:", rateLimitError);
-      }
+    if (rateLimitError) {
+      console.error("Error checking rate limit:", rateLimitError);
+    }
 
-      if (recentComments && recentComments.length >= 3) {
-        document.getElementById("form-message").textContent =
-          "Rate limit exceeded. You can only submit 3 tips per hour. Please try again later.";
-        return;
-      }
-
-      // Insert comment with IP address
-      const { error } = await supabaseClient.from("comments").insert([
-        {
-          guide_page: guidePage,
-          author_name: authorName,
-          comment_text: commentText,
-          approved: false,
-          ip_address: userIP,
-        },
-      ]);
-
-      if (error) {
-        console.error("Error submitting comment:", error);
-        document.getElementById("form-message").textContent =
-          "Error submitting tip. Please try again.";
-        return;
-      }
-
+    if (recentComments && recentComments.length >= 3) {
       document.getElementById("form-message").textContent =
-        "Thanks! Your tip will appear after moderation.";
-      document.getElementById("comment-form").reset();
-      grecaptcha.reset(); // Reset reCAPTCHA
-    });
+        "Rate limit exceeded. You can only submit 3 tips per hour. Please try again later.";
+      return;
+    }
+
+    // Insert comment with IP address
+    const { error } = await supabaseClient.from("comments").insert([
+      {
+        guide_page: guidePage,
+        author_name: authorName,
+        comment_text: commentText,
+        approved: false,
+        ip_address: userIP,
+      },
+    ]);
+
+    if (error) {
+      console.error("Error submitting comment:", error);
+      document.getElementById("form-message").textContent =
+        "Error submitting tip. Please try again.";
+      return;
+    }
+
+    document.getElementById("form-message").textContent =
+      "Thanks! Your tip will appear after moderation.";
+    document.getElementById("comment-form").reset();
+    grecaptcha.reset(); // Reset reCAPTCHA
+  });
 
   // Escape HTML to prevent XSS
   function escapeHtml(text) {
@@ -136,15 +130,16 @@ function initCommentSystem(guidePage) {
 // Analytics tracking
 async function trackPageView() {
   try {
-    const ipResponse = await fetch("https://ipapi.co/json/");
-    const locationData = await ipResponse.json();
+    // Just get IP without location for now
+    const ipResponse = await fetch("https://api.ipify.org?format=json");
+    const ipData = await ipResponse.json();
 
     await supabaseClient.from("page_views").insert([
       {
         page_path: window.location.pathname,
-        ip_address: locationData.ip || "unknown",
-        country: locationData.country_name || "unknown",
-        city: locationData.city || "unknown",
+        ip_address: ipData.ip || "unknown",
+        country: "N/A",
+        city: "N/A",
       },
     ]);
   } catch (e) {
