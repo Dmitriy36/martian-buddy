@@ -28,11 +28,10 @@ const MATRIX_PHRASES = ["phrase-a", "phrase-b", "phrase-3"];
 // *** END OF CUSTOM PHRASES ***
 
 // Classic Matrix katakana and symbols mixed in
-const MATRIX_CHARS =
-  "アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789@#$%&*";
+const MATRIX_CHARS = "アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789@#$%&*";
 
 // *** TUNE MATRIX APPEARANCE HERE ***
-const MATRIX_CHAR_SIZE = 42; // character size in pixels — controls font, column width, and trail spacing
+const MATRIX_CHAR_SIZE = 25; // character size in pixels — controls font, column width, and trail spacing
 const MATRIX_SPEED = 5; // multiplier for fall speed — lower = slower
 const MATRIX_CHAR_SPACING = 0.7;
 // *** END TUNING ***
@@ -49,7 +48,7 @@ function getRandomChar() {
 function initMatrix() {
   matrixCanvas.width = window.innerWidth;
   matrixCanvas.height = window.innerHeight;
-  const numCols = Math.floor(matrixCanvas.width / MATRIX_CHAR_SIZE);
+  const numCols = Math.floor((matrixCanvas.width / MATRIX_CHAR_SIZE) * 1.5); // increase this multiplier for more rain columns
   matrixColumns = Array.from({ length: numCols }, (_, i) => {
     const usePhrase = Math.random() > 0.3;
     const source = usePhrase
@@ -147,15 +146,13 @@ firebaseAuth.onAuthStateChanged(async (user) => {
   }
 });
 
-document
-  .getElementById("google-login-button")
-  .addEventListener("click", async () => {
-    try {
-      await firebaseAuth.signInWithPopup(googleProvider);
-    } catch (e) {
-      console.error("Google login error:", e);
-    }
-  });
+document.getElementById("google-login-button").addEventListener("click", async () => {
+  try {
+    await firebaseAuth.signInWithPopup(googleProvider);
+  } catch (e) {
+    console.error("Google login error:", e);
+  }
+});
 
 logoutButton.addEventListener("click", async () => {
   await firebaseAuth.signOut();
@@ -269,10 +266,7 @@ stopButton.addEventListener("click", async () => {
 
   const endTime = new Date();
   const startTime = new Date(activeFast.start_time);
-  const durationSeconds = Math.max(
-    0,
-    Math.floor((endTime.getTime() - startTime.getTime()) / 1000)
-  );
+  const durationSeconds = Math.max(0, Math.floor((endTime.getTime() - startTime.getTime()) / 1000));
 
   const { error } = await supabaseClient
     .from("fasts")
@@ -381,9 +375,7 @@ function renderHistory(fasts) {
 
     const rangeSpan = document.createElement("span");
     rangeSpan.className = "history-range";
-    rangeSpan.textContent = `${formatDateTime(fast.start_time)} → ${formatDateTime(
-      fast.end_time
-    )}`;
+    rangeSpan.textContent = `${formatDateTime(fast.start_time)} → ${formatDateTime(fast.end_time)}`;
 
     li.appendChild(durationSpan);
     li.appendChild(rangeSpan);
@@ -409,6 +401,6 @@ function formatDateTime(isoString) {
   const d = new Date(isoString);
   const pad = (n) => String(n).padStart(2, "0");
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(
-    d.getDate()
+    d.getDate(),
   )} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
