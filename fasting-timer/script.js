@@ -18,6 +18,98 @@ const SUPABASE_URL = "https://bkssvocrrtsrvixsdips.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_jTvQT_2bWNqjExhXJsgzwQ_6pZpbQZy";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// ── MATRIX RAIN ───────────────────────────────────────────────────────────────
+// Animated Matrix-style falling text in the background, same mechanics as the
+// to-do app's version. Runs continuously (no light/dark toggle on this page).
+// TO REMOVE: delete this block and <canvas id="matrix-canvas"> in index.html.
+//
+// *** EDIT YOUR CUSTOM PHRASES HERE: ***
+const MATRIX_PHRASES = ["phrase-a", "phrase-b", "phrase-3"];
+// *** END OF CUSTOM PHRASES ***
+
+// Classic Matrix katakana and symbols mixed in
+const MATRIX_CHARS =
+  "アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789@#$%&*";
+
+// *** TUNE MATRIX APPEARANCE HERE ***
+const MATRIX_CHAR_SIZE = 42; // character size in pixels — controls font, column width, and trail spacing
+const MATRIX_SPEED = 5; // multiplier for fall speed — lower = slower
+const MATRIX_CHAR_SPACING = 0.7;
+// *** END TUNING ***
+
+const matrixCanvas = document.getElementById("matrix-canvas");
+const matrixCtx = matrixCanvas.getContext("2d");
+let matrixColumns = [];
+let matrixAnimFrame = null;
+
+function getRandomChar() {
+  return MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
+}
+
+function initMatrix() {
+  matrixCanvas.width = window.innerWidth;
+  matrixCanvas.height = window.innerHeight;
+  const numCols = Math.floor(matrixCanvas.width / MATRIX_CHAR_SIZE);
+  matrixColumns = Array.from({ length: numCols }, (_, i) => {
+    const usePhrase = Math.random() > 0.3;
+    const source = usePhrase
+      ? MATRIX_PHRASES[Math.floor(Math.random() * MATRIX_PHRASES.length)]
+      : null;
+    const numChars = source ? source.length : 8;
+    return {
+      x: i * MATRIX_CHAR_SIZE,
+      chars: Array.from({ length: numChars }, (_, j) => ({
+        char: source ? source[j] : getRandomChar(),
+        yOffset: j * MATRIX_CHAR_SIZE * MATRIX_CHAR_SPACING,
+      })),
+      y: Math.random() * -(matrixCanvas.height * 2),
+      speed: 0.3 + Math.random() * 0.4,
+    };
+  });
+}
+
+function drawMatrix() {
+  matrixCtx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+  matrixCtx.font = `${MATRIX_CHAR_SIZE}px monospace`;
+  matrixColumns.forEach((col) => {
+    col.chars.forEach((item, i) => {
+      const y = col.y + item.yOffset;
+      if (y < 0 || y > matrixCanvas.height) return;
+      if (i === 0) {
+        matrixCtx.fillStyle = "#00ff88";
+      } else {
+        const alpha = 1 - (i / col.chars.length) * 0.8;
+        matrixCtx.fillStyle = `rgba(0, 170, 68, ${alpha})`;
+      }
+      matrixCtx.fillText(item.char, col.x, y);
+    });
+    col.y += col.speed * MATRIX_SPEED;
+    if (col.y > matrixCanvas.height + matrixCanvas.height * 0.5) {
+      col.y = Math.random() * -300;
+      const usePhrase = Math.random() > 0.3;
+      const source = usePhrase
+        ? MATRIX_PHRASES[Math.floor(Math.random() * MATRIX_PHRASES.length)]
+        : null;
+      const numChars = source ? source.length : 8;
+      col.chars = Array.from({ length: numChars }, (_, j) => ({
+        char: source ? source[j] : getRandomChar(),
+        yOffset: j * MATRIX_CHAR_SIZE * MATRIX_CHAR_SPACING,
+      }));
+    }
+  });
+  matrixAnimFrame = requestAnimationFrame(drawMatrix);
+}
+
+function startMatrix() {
+  if (matrixAnimFrame) return;
+  initMatrix();
+  drawMatrix();
+}
+
+window.addEventListener("resize", initMatrix);
+
+startMatrix();
+
 // ── UI ELEMENTS ───────────────────────────────────────────────────────────────
 const loginScreen = document.getElementById("login-screen");
 const appDiv = document.getElementById("app");
