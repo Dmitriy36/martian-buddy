@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fasting Timer</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="desktop">
+
+    <div class="window" id="app-window">
+
+      <!-- Title bar -->
+      <div class="title-bar">
+        <span class="title-bar-text">FASTING TIMER</span>
+        <button id="logout-button" class="title-bar-btn hidden" title="Log out">✕</button>
+      </div>
+
+      <div class="window-body">
+
+        <!-- LOGIN SCREEN -->
+        <div id="login-screen">
+          <p class="login-copy">Sign in to start tracking.</p>
+          <button id="google-login-button" class="btn-3d btn-wide">
+            SIGN IN WITH GOOGLE
+          </button>
+        </div>
+
+        <!-- APP SCREEN -->
+        <div id="app" class="hidden">
+
+          <div class="lcd-panel">
+            <div class="lcd-labels">
+              <span>DAYS</span><span>HRS</span><span>MIN</span><span>SEC</span>
+            </div>
+            <div class="lcd-display" id="lcd-display">00:00:00:00</div>
+            <div class="lcd-status" id="lcd-status">NOT FASTING</div>
+          </div>
+
+          <div class="button-row">
+            <button id="start-button" class="btn-3d">START</button>
+            <button id="custom-start-button" class="btn-3d">CUSTOM START</button>
+            <button id="stop-button" class="btn-3d" disabled>STOP</button>
+          </div>
+
+          <!-- Custom start panel -->
+          <div id="custom-start-panel" class="inset-panel hidden">
+            <label for="custom-start-input" class="inset-label">
+              FAST ACTUALLY STARTED AT:
+            </label>
+            <input type="datetime-local" id="custom-start-input" class="retro-input" />
+            <div class="button-row">
+              <button id="custom-start-confirm" class="btn-3d">CONFIRM</button>
+              <button id="custom-start-cancel" class="btn-3d">CANCEL</button>
+            </div>
+          </div>
+
+          <!-- History -->
+          <div class="history-section">
+            <div class="history-header">FAST HISTORY</div>
+            <ul id="history-list" class="history-list">
+              <li class="history-empty">No completed fasts yet.</li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="statusbar">martian-buddy.com/fasting-timer</div>
+  </div>
+
+  <!-- Firebase (compat SDK, matches existing to-do app) -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>
