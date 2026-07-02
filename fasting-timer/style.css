@@ -83,11 +83,14 @@ body {
   color: var(--text);
   cursor: pointer;
   line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .title-bar-btn:active {
-  border-color: var(--face-shadow-dark) var(--face-light) var(--face-light)
-    var(--face-shadow-dark);
+  border-color: var(--face-shadow-dark) var(--face-light) var(--face-light) var(--face-shadow-dark);
 }
 
 .window-body {
@@ -130,7 +133,9 @@ body {
 
 .lcd-display {
   color: var(--lcd-fg);
-  text-shadow: 0 0 6px var(--lcd-fg), 0 0 14px rgba(57, 255, 106, 0.5);
+  text-shadow:
+    0 0 6px var(--lcd-fg),
+    0 0 14px rgba(57, 255, 106, 0.5);
   font-size: clamp(28px, 8vw, 42px);
   font-weight: bold;
   text-align: center;
@@ -166,8 +171,7 @@ body {
   border: 3px solid var(--face-light);
   border-right-color: var(--face-shadow-dark);
   border-bottom-color: var(--face-shadow-dark);
-  box-shadow:
-    1px 1px 0 0 var(--face-shadow) inset;
+  box-shadow: 1px 1px 0 0 var(--face-shadow) inset;
   padding: 10px 8px;
   font-family: var(--font-mono);
   font-weight: bold;
@@ -178,8 +182,7 @@ body {
 }
 
 .btn-3d:active:not(:disabled) {
-  border-color: var(--face-shadow-dark) var(--face-light) var(--face-light)
-    var(--face-shadow-dark);
+  border-color: var(--face-shadow-dark) var(--face-light) var(--face-light) var(--face-shadow-dark);
   box-shadow: -1px -1px 0 0 var(--face-shadow) inset;
   padding-top: 11px;
   padding-bottom: 9px;
