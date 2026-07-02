@@ -24,7 +24,15 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // TO REMOVE: delete this block and <canvas id="matrix-canvas"> in index.html.
 //
 // *** EDIT YOUR CUSTOM PHRASES HERE: ***
-const MATRIX_PHRASES = ["phrase-a", "phrase-b", "phrase-3"];
+const MATRIX_PHRASES = [
+  "so hungry...",
+  "...I could eat a horse, hoss",
+  "triple cheeseburger with extra cheese... oh...",
+  "...with extra little hamburgers on the side",
+  "a dish of chicken legs ...mm",
+  "some fried catfish, sir?",
+  "leave the skin on the chicken...",
+];
 // *** END OF CUSTOM PHRASES ***
 
 // Classic Matrix katakana and symbols mixed in
