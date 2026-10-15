@@ -102,8 +102,7 @@ body {
 }
 
 .title-bar-btn:active {
-  border-color: var(--face-shadow-dark) var(--face-light) var(--face-light)
-    var(--face-shadow-dark);
+  border-color: var(--face-shadow-dark) var(--face-light) var(--face-light) var(--face-shadow-dark);
 }
 
 .window-body {
@@ -146,7 +145,9 @@ body {
 
 .lcd-display {
   color: var(--lcd-fg);
-  text-shadow: 0 0 6px var(--lcd-fg), 0 0 14px rgba(57, 255, 106, 0.5);
+  text-shadow:
+    0 0 6px var(--lcd-fg),
+    0 0 14px rgba(57, 255, 106, 0.5);
   font-size: clamp(28px, 8vw, 42px);
   font-weight: bold;
   text-align: center;
@@ -182,8 +183,7 @@ body {
   border: 3px solid var(--face-light);
   border-right-color: var(--face-shadow-dark);
   border-bottom-color: var(--face-shadow-dark);
-  box-shadow:
-    1px 1px 0 0 var(--face-shadow) inset;
+  box-shadow: 1px 1px 0 0 var(--face-shadow) inset;
   padding: 10px 8px;
   font-family: var(--font-mono);
   font-weight: bold;
@@ -194,8 +194,7 @@ body {
 }
 
 .btn-3d:active:not(:disabled) {
-  border-color: var(--face-shadow-dark) var(--face-light) var(--face-light)
-    var(--face-shadow-dark);
+  border-color: var(--face-shadow-dark) var(--face-light) var(--face-light) var(--face-shadow-dark);
   box-shadow: -1px -1px 0 0 var(--face-shadow) inset;
   padding-top: 11px;
   padding-bottom: 9px;
@@ -261,6 +260,7 @@ body {
   margin-bottom: 6px;
   border-bottom: 2px solid var(--face-shadow-dark);
   padding-bottom: 4px;
+  text-align: center;
 }
 
 .history-list {
@@ -279,6 +279,36 @@ body {
   padding: 8px 10px;
   border-bottom: 1px dashed var(--face-shadow);
   font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.history-entry-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.trash-button {
+  flex-shrink: 0;
+  background: var(--face);
+  border: 2px solid var(--face-light);
+  border-right-color: var(--face-shadow-dark);
+  border-bottom-color: var(--face-shadow-dark);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.trash-button:active {
+  border-color: var(--face-shadow-dark) var(--face-light) var(--face-light) var(--face-shadow-dark);
 }
 
 .history-list li:last-child {

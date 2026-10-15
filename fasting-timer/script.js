@@ -208,6 +208,9 @@ startButton.addEventListener("click", async () => {
 });
 
 async function beginFast(startTimeIso) {
+  if (activeFast) return;
+  startButton.disabled = true;
+  customStartButton.disabled = true;
   const { data, error } = await supabaseClient
     .from("fasts")
     .insert({
@@ -220,6 +223,7 @@ async function beginFast(startTimeIso) {
 
   if (error) {
     console.error(error);
+    await loadActiveFast();
     return;
   }
 
@@ -365,7 +369,6 @@ async function loadHistory() {
 
 function renderHistory(fasts) {
   historyList.innerHTML = "";
-
   if (fasts.length === 0) {
     const li = document.createElement("li");
     li.className = "history-empty";
@@ -373,9 +376,11 @@ function renderHistory(fasts) {
     historyList.appendChild(li);
     return;
   }
-
   fasts.forEach((fast) => {
     const li = document.createElement("li");
+
+    const textWrap = document.createElement("div");
+    textWrap.className = "history-entry-text";
 
     const durationSpan = document.createElement("span");
     durationSpan.className = "history-duration";
@@ -383,12 +388,35 @@ function renderHistory(fasts) {
 
     const rangeSpan = document.createElement("span");
     rangeSpan.className = "history-range";
-    rangeSpan.textContent = `${formatDateTime(fast.start_time)} → ${formatDateTime(fast.end_time)}`;
+    rangeSpan.textContent = `${formatDateTime(fast.start_time)} to ${formatDateTime(fast.end_time)}`;
 
-    li.appendChild(durationSpan);
-    li.appendChild(rangeSpan);
+    textWrap.appendChild(durationSpan);
+    textWrap.appendChild(rangeSpan);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "trash-button";
+    deleteBtn.title = "Delete this fast";
+    deleteBtn.textContent = "🗑";
+    deleteBtn.addEventListener("click", () => deleteFast(fast.id));
+
+    li.appendChild(textWrap);
+    li.appendChild(deleteBtn);
     historyList.appendChild(li);
   });
+}
+
+async function deleteFast(fastId) {
+  const confirmed = confirm("Delete this fast from your history?");
+  if (!confirmed) return;
+
+  const { error } = await supabaseClient.from("fasts").delete().eq("id", fastId);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  await loadHistory();
 }
 
 function formatDurationReadable(totalSeconds) {
