@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery - Martian Buddy</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #1a1a1a;
+        color: #f0f0f0;
+      }
+
+      /* Thumbnail grid: auto-wraps, fills the row with as many
+         photos as fit, one photo stays one photo. */
+      .gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+      }
+
+      .gallery img {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        cursor: pointer;
+        border: 2px solid #444;
+        transition: border-color 0.15s ease;
+      }
+
+      .gallery img:hover {
+        border-color: #ff4444;
+      }
+
+      /* Lightbox overlay (hidden until a thumbnail is clicked) */
+      .lightbox {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .lightbox.open {
+        display: flex;
+      }
+
+      .lightbox img {
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+      }
+
+      .lightbox .close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: #f0f0f0;
+        font-size: 2.5em;
+        font-weight: bold;
+        cursor: pointer;
+        line-height: 1;
+      }
+
+      .lightbox .close:hover {
+        color: #ff4444;
+      }
+    </style>
+  </head>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/comments-analytics.js"></script>
+  <body>
+    <div class="gallery" id="gallery">
+      <img src="pics/parkdale.padding" alt="" />
+    </div>
+
+    <!-- Lightbox: shows the full-size image when a thumbnail is clicked -->
+    <div class="lightbox" id="lightbox">
+      <span class="close" id="lightbox-close">&times;</span>
+      <img src="" alt="" id="lightbox-img" />
+    </div>
+
+    <script>
+      const gallery = document.getElementById("gallery");
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightbox-img");
+      const lightboxClose = document.getElementById("lightbox-close");
+
+      // Open the lightbox when any thumbnail is clicked
+      gallery.addEventListener("click", (e) => {
+        if (e.target.tagName === "IMG") {
+          lightboxImg.src = e.target.src;
+          lightbox.classList.add("open");
+        }
+      });
+
+      // Close helpers
+      function closeLightbox() {
+        lightbox.classList.remove("open");
+        lightboxImg.src = "";
+      }
+
+      // Close on X
+      lightboxClose.addEventListener("click", closeLightbox);
+
+      // Close on clicking the dark background (but not the image itself)
+      lightbox.addEventListener("click", (e) => {
+        if (e.target === lightbox) {
+          closeLightbox();
+        }
+      });
+
+      // Close on Esc key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeLightbox();
+        }
+      });
+    </script>
+  </body>
+</html>
