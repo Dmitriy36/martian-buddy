@@ -129,21 +129,30 @@ function initCommentSystem(guidePage) {
 
 // Analytics tracking
 async function trackPageView() {
-  // Defaults used if the location lookup fails, so a view is still
-  // logged (same behavior as before, just not hardcoded "N/A").
+  // Defaults used if every lookup fails, so a view is still logged.
   let ip = "unknown";
   let country = "unknown";
   let city = "unknown";
 
-  try {
-    // Single call returns IP + country + city together.
-    const geoResponse = await fetch("https://ipapi.co/json/");
-    const geoData = await geoResponse.json();
-    ip = geoData.ip || ip;
-    country = geoData.country_name || country;
-    city = geoData.city || city;
-  } catch (e) {
-    console.log("Location lookup failed, logging view without it:", e);
+  // Try IPv4 first (gives the short, tidy address), then fall back
+  // to the default endpoint (returns IPv6 if that's all the visitor
+  // has). Both return IP + country + city in one response.
+  const endpoints = ["https://ipv4.ipapi.co/json/", "https://ipapi.co/json/"];
+
+  for (const url of endpoints) {
+    try {
+      const geoResponse = await fetch(url);
+      const geoData = await geoResponse.json();
+      if (geoData && geoData.ip) {
+        ip = geoData.ip;
+        country = geoData.country_name || country;
+        city = geoData.city || city;
+        break; // got a usable address, stop trying
+      }
+    } catch (e) {
+      // This endpoint failed; loop continues to the next one.
+      console.log("Lookup failed for " + url + ", trying next:", e);
+    }
   }
 
   try {
