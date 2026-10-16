@@ -134,25 +134,34 @@ async function trackPageView() {
   let country = "unknown";
   let city = "unknown";
 
-  // Try IPv4 first (gives the short, tidy address), then fall back
-  // to the default endpoint (returns IPv6 if that's all the visitor
-  // has). Both return IP + country + city in one response.
-  const endpoints = ["https://ipv4.ipapi.co/json/", "https://ipapi.co/json/"];
-
-  for (const url of endpoints) {
-    try {
-      const geoResponse = await fetch(url);
-      const geoData = await geoResponse.json();
-      if (geoData && geoData.ip) {
-        ip = geoData.ip;
-        country = geoData.country_name || country;
-        city = geoData.city || city;
-        break; // got a usable address, stop trying
-      }
-    } catch (e) {
-      // This endpoint failed; loop continues to the next one.
-      console.log("Lookup failed for " + url + ", trying next:", e);
+  // Step 1: get the IPv4 address. api.ipify.org is IPv4-only, so this
+  // returns the short, tidy form whenever the visitor has IPv4.
+  try {
+    const v4Response = await fetch("https://api.ipify.org?format=json");
+    const v4Data = await v4Response.json();
+    if (v4Data && v4Data.ip) {
+      ip = v4Data.ip;
     }
+  } catch (e) {
+    console.log("IPv4 lookup failed:", e);
+  }
+
+  // Step 2: get location. ipapi.co returns country/city, plus its own
+  // IP reading. If step 1 got an IPv4, we keep that and only take the
+  // location here. If step 1 failed (IPv6-only visitor), we fall back
+  // to the IP ipapi.co reports, which will be their IPv6.
+  try {
+    const geoResponse = await fetch("https://ipapi.co/json/");
+    const geoData = await geoResponse.json();
+    if (geoData) {
+      if (ip === "unknown" && geoData.ip) {
+        ip = geoData.ip; // fallback: no IPv4 was found, log IPv6
+      }
+      country = geoData.country_name || country;
+      city = geoData.city || city;
+    }
+  } catch (e) {
+    console.log("Location lookup failed:", e);
   }
 
   try {
