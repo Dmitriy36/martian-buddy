@@ -30,11 +30,11 @@ function initCommentSystem(guidePage) {
         (comment) => `
         <div class="tip">
             <strong>${escapeHtml(comment.author_name)}</strong> - ${new Date(
-          comment.created_at
-        ).toLocaleDateString()}
+              comment.created_at,
+            ).toLocaleDateString()}
             <p>${escapeHtml(comment.comment_text)}</p>
         </div>
-    `
+    `,
       )
       .join("");
   }
@@ -129,17 +129,30 @@ function initCommentSystem(guidePage) {
 
 // Analytics tracking
 async function trackPageView() {
-  try {
-    // Just get IP without location for now
-    const ipResponse = await fetch("https://api.ipify.org?format=json");
-    const ipData = await ipResponse.json();
+  // Defaults used if the location lookup fails, so a view is still
+  // logged (same behavior as before, just not hardcoded "N/A").
+  let ip = "unknown";
+  let country = "unknown";
+  let city = "unknown";
 
+  try {
+    // Single call returns IP + country + city together.
+    const geoResponse = await fetch("https://ipapi.co/json/");
+    const geoData = await geoResponse.json();
+    ip = geoData.ip || ip;
+    country = geoData.country_name || country;
+    city = geoData.city || city;
+  } catch (e) {
+    console.log("Location lookup failed, logging view without it:", e);
+  }
+
+  try {
     await supabaseClient.from("page_views").insert([
       {
         page_path: window.location.pathname,
-        ip_address: ipData.ip || "unknown",
-        country: "N/A",
-        city: "N/A",
+        ip_address: ip,
+        country: country,
+        city: city,
       },
     ]);
   } catch (e) {
