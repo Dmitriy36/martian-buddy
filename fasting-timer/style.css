@@ -167,6 +167,16 @@ body {
   color: var(--lcd-fg);
 }
 
+.lcd-started {
+  text-align: center;
+  color: var(--lcd-fg-dim);
+  font-size: 11px;
+  letter-spacing: 1px;
+  margin-top: 4px;
+  min-height: 1.2em;
+  overflow-wrap: anywhere;
+}
+
 /* ── Buttons ───────────────────────────────────────────────── */
 
 .button-row {

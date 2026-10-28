@@ -124,6 +124,7 @@ const logoutButton = document.getElementById("logout-button");
 
 const lcdDisplay = document.getElementById("lcd-display");
 const lcdStatus = document.getElementById("lcd-status");
+const lcdStarted = document.getElementById("lcd-started");
 
 const startButton = document.getElementById("start-button");
 const customStartButton = document.getElementById("custom-start-button");
@@ -306,6 +307,7 @@ function enterActiveState() {
   stopButton.disabled = false;
   lcdStatus.textContent = "FASTING";
   lcdStatus.classList.add("active");
+  lcdStarted.textContent = "STARTED " + formatDateTime(activeFast.start_time);
   startTicking();
 }
 
@@ -315,6 +317,7 @@ function enterIdleState() {
   stopButton.disabled = true;
   lcdStatus.textContent = "NOT FASTING";
   lcdStatus.classList.remove("active");
+  lcdStarted.textContent = "";
   stopTicking();
   lcdDisplay.textContent = "00:00:00:00";
 }
